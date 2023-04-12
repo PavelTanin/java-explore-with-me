@@ -26,7 +26,7 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository statsRepository;
 
-    private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public String addHit(EndpointHitDto endpointHitDto) {
@@ -46,16 +46,16 @@ public class StatsServiceImpl implements StatsService {
                 if (uris == null) {
                     log.info("Получена статистика посещения всех ссылок уникальными " +
                             "пользователями в период с {} до {}", start, end);
-                    return statsRepository.findAllHitsTimestampBetweenAndUnique(LocalDateTime.parse(start, TIMEFORMAT),
-                                    LocalDateTime.parse(end, TIMEFORMAT)).stream()
+                    return statsRepository.findAllHitsTimestampBetweenAndUnique(LocalDateTime.parse(start, timeFormat),
+                                    LocalDateTime.parse(end, timeFormat)).stream()
                             .sorted(comparing(ViewStats::getHits).reversed())
                             .map(HitMapper::toViewStatsDto)
                             .collect(Collectors.toList());
                 } else {
                     log.info("Получена статистика посещения ссылок({}) уникальными " +
                             "пользователями в период с {} до {}", uris, start, end);
-                    return statsRepository.findAllHitsTimestampBetweenAndUriInAndUnique(LocalDateTime.parse(start, TIMEFORMAT),
-                                    LocalDateTime.parse(end, TIMEFORMAT), uris).stream()
+                    return statsRepository.findAllHitsTimestampBetweenAndUriInAndUnique(LocalDateTime.parse(start, timeFormat),
+                                    LocalDateTime.parse(end, timeFormat), uris).stream()
                             .sorted(comparing(ViewStats::getHits).reversed())
                             .map(HitMapper::toViewStatsDto)
                             .collect(Collectors.toList());
@@ -64,16 +64,16 @@ public class StatsServiceImpl implements StatsService {
                 if (uris == null) {
                     log.info("Получена статистика посещения всех ссылок в период с {} до {}", start, end);
                     return statsRepository
-                            .findAllHitsTimestampBetweenAndNotUnique(LocalDateTime.parse(start, TIMEFORMAT),
-                                    LocalDateTime.parse(end, TIMEFORMAT)).stream()
+                            .findAllHitsTimestampBetweenAndNotUnique(LocalDateTime.parse(start, timeFormat),
+                                    LocalDateTime.parse(end, timeFormat)).stream()
                             .sorted(comparing(ViewStats::getHits).reversed())
                             .map(HitMapper::toViewStatsDto)
                             .collect(Collectors.toList());
                 } else {
                     log.info("Получена статистика посещения ссылок({}) в период с {} до {}", uris, start, end);
                     return statsRepository
-                            .findAllHitsTimestampBetweenAndUriInAndNotUnique(LocalDateTime.parse(start, TIMEFORMAT),
-                            LocalDateTime.parse(end, TIMEFORMAT), uris).stream()
+                            .findAllHitsTimestampBetweenAndUriInAndNotUnique(LocalDateTime.parse(start, timeFormat),
+                            LocalDateTime.parse(end, timeFormat), uris).stream()
                             .sorted(comparing(ViewStats::getHits).reversed())
                             .map(HitMapper::toViewStatsDto)
                             .collect(Collectors.toList());
