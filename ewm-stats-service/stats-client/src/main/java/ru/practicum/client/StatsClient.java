@@ -34,7 +34,7 @@ public class StatsClient {
                 .build();
     }
 
-    public void hit() {
+    public void hit() throws Exception {
         EndpointHitDto hit = new EndpointHitDto();
         hit.setApp(application);
 
@@ -52,7 +52,7 @@ public class StatsClient {
 
             HttpResponse<Void> resource = httpClient.send(hitRequest, HttpResponse.BodyHandlers.discarding());
         } catch (Exception e) {
-
+            throw new Exception("Error");
         }
     }
 
