@@ -2,6 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<modules>
+		<module>ewm-stats-service</module>
+	</modules>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -144,6 +147,10 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -183,5 +190,29 @@
 			</build>
 		</profile>
 	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>ru.practicum</groupId>
+				<artifactId>stats-dto</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>ru.practicum</groupId>
+				<artifactId>stats-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>ru.practicum</groupId>
+				<artifactId>stats-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
