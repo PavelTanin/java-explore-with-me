@@ -65,7 +65,7 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Удаляем подборку");
         if (!compilationRepository.existsById(compId)) {
             log.info("Такой подборки не существует");
-            new ObjectNotFoundException("Такой подборки событий не существует");
+            throw new ObjectNotFoundException("Такой подборки событий не существует");
         }
         compilationRepository.deleteById(compId);
         log.info("Подборка удалена");
