@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
-import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users/{userId}/events")
