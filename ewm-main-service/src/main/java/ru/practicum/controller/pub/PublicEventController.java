@@ -43,8 +43,10 @@ public class PublicEventController {
                                     @RequestParam(name = "onlyAvailable", required = false) Boolean available,
                                     @RequestParam(name = "sort", required = false) String sort,
                                     @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                    @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+                                    @Positive @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                    HttpServletRequest request) throws JsonProcessingException {
         log.info("Получен GET-запрос на получение списка событий");
+        log.info(statsClient.hit(request, "ewm-main-service"));
         return new ResponseEntity(eventService.getEvents(text, cats, paid, start, end, available,
                 sort, from, size), HttpStatus.OK);
     }
