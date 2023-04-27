@@ -99,6 +99,10 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new ObjectNotFoundException("Такого события нет"));
         List<Request> requests = requestRepository.findAllByIdInOrderById(update.getRequestIds());
         if (update.getStatus().equals(RequestStatus.REJECTED)) {
+            if (requests.stream().filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED)).findAny() != null) {
+                log.info("Попытка отменить уже принятую заявку");
+                throw new CancelingRequestException("Нельзя отменять уже принятые заявки");
+            }
             requests.stream().forEach(o -> o.setStatus(RequestStatus.REJECTED));
             log.info("Заявки ids: {} на участие в событии id: {} отменены", update.getRequestIds().toString(), eventId);
             return requestRepository.saveAll(requests).stream()
@@ -146,7 +150,7 @@ public class RequestServiceImpl implements RequestService {
             log.info("Событие не опубликовано");
             throw new EventPubProblemException("Нельзя подать заявку на участие в неопубликованном событии");
         }
-        if (!(requests.size() < participantLimit)) {
+        if (!(requests.stream().filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED)).count() < participantLimit)) {
             log.info("Лимит заявок достигнут");
             throw new RequestLimitException("Для этого события достигнут лимит заявок");
         }

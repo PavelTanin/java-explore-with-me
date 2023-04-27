@@ -50,7 +50,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({WrongEventTimeException.class, EventPubProblemException.class,
-            UserWrongPropertiesException.class, RequestLimitException.class})
+            UserWrongPropertiesException.class, RequestLimitException.class, CancelingRequestException.class})
     public ResponseEntity validationException(Exception ex) {
         ApiError ae = new ApiError(HttpStatus.CONFLICT.name(), "Конфликт данных", ex.getMessage(),
                 LocalDateTime.now().format(formatter));
