@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users/{userId}/events")
@@ -58,14 +60,14 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}/requests")
-    private ResponseEntity getUserEventRequests(@Positive @PathVariable(name = "userId") Long userId,
+    public ResponseEntity getUserEventRequests(@Positive @PathVariable(name = "userId") Long userId,
                                                  @Positive @PathVariable(name = "eventId") Long eventId) {
         log.info("Получен GET-запрос от пользователя id: {} на просмотр заявок на участие в событии id: {}", userId, eventId);
         return new ResponseEntity(requestService.getUserEventRequests(userId, eventId), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}/requests")
-    private ResponseEntity updateUserEventRequests(@RequestBody @Valid EventRequestStatusUpdateRequest updates,
+    public ResponseEntity updateUserEventRequests(@RequestBody @Valid EventRequestStatusUpdateRequest updates,
                                                    @Positive @PathVariable(name = "userId") Long userId,
                                                    @Positive @PathVariable(name = "eventId") Long eventId) {
         log.info("Получен PATCH-запрос от пользователя id: {} на подтверждение заявок " +

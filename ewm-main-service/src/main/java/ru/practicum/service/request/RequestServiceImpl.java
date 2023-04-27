@@ -93,38 +93,38 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Transactional
-    public List<EventRequestStatusUpdateResult> updateUserEventRequests(EventRequestStatusUpdateRequest update,
-                                                                        Long userId, Long eventId) {
+    public EventRequestStatusUpdateResult updateUserEventRequests(EventRequestStatusUpdateRequest update,
+                                                                  Long userId, Long eventId) {
         log.info("Обновление статуса заявок для события id: {}", eventId);
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new ObjectNotFoundException("Такого события нет"));
         List<Request> requests = requestRepository.findAllByIdInOrderById(update.getRequestIds());
+        EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
         if (update.getStatus().equals(RequestStatus.REJECTED)) {
-            if (requests.stream().filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED)).findAny() != null) {
+            if (requests.stream().anyMatch(o -> o.getStatus().equals(RequestStatus.CONFIRMED))) {
                 log.info("Попытка отменить уже принятую заявку");
                 throw new CancelingRequestException("Нельзя отменять уже принятые заявки");
             }
             requests.stream().forEach(o -> o.setStatus(RequestStatus.REJECTED));
+            result.setRejectedRequests(requestRepository.saveAll(requests).stream()
+                    .map(RequestMapper::toRequestDto)
+                    .collect(Collectors.toList()));
             log.info("Заявки ids: {} на участие в событии id: {} отменены", update.getRequestIds().toString(), eventId);
-            return requestRepository.saveAll(requests).stream()
-                    .map(RequestMapper::toRequestResult)
-                    .collect(Collectors.toList());
         } else {
             Long requestLimit = event.getParticipantLimit();
-            Long approvedRequests = event.getRequests().stream().filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED))
-                    .count();
+            Long approvedRequests = (long) event.getRequests().size();
             int updateLimit = Math.toIntExact(requestLimit - approvedRequests);
-            if (updateLimit <= 0 || event.getRequestModeration().equals(false)) {
+            if (updateLimit < 0 || event.getRequestModeration().equals(false)) {
                 log.info("Достигнут лимит одобренных заявок или модерация заявок не требуется");
                 throw new RequestLimitException("Лимит участников события достигнут или заявки не требуют подтверждения");
             }
 
             if (updateLimit >= requests.size()) {
-                requests.stream().forEach(o -> o.setStatus(RequestStatus.CONFIRMED));
+                requests.forEach(o -> o.setStatus(RequestStatus.CONFIRMED));
+                result.setConfirmedRequests(requestRepository.saveAll(requests).stream()
+                        .map(RequestMapper::toRequestDto)
+                        .collect(Collectors.toList()));
                 log.info("Заявки ids: {} на участие в событии id: {} приняты",
                         update.getRequestIds().toString(), eventId);
-                return requestRepository.saveAll(requests).stream()
-                        .map(RequestMapper::toRequestResult)
-                        .collect(Collectors.toList());
             } else {
                 for (int i = 0; i <= updateLimit; i++) {
                     requests.get(i).setStatus(RequestStatus.CONFIRMED);
@@ -133,12 +133,20 @@ public class RequestServiceImpl implements RequestService {
                         update.getRequestIds().toString(), eventId);
                 requests.stream().filter(o -> !o.getStatus().equals(RequestStatus.CONFIRMED))
                         .forEach(o -> o.setStatus(RequestStatus.REJECTED));
+                result.setConfirmedRequests(requestRepository.saveAll(requests.stream()
+                                .filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED))
+                                .collect(Collectors.toList())).stream()
+                        .map(RequestMapper::toRequestDto)
+                        .collect(Collectors.toList()));
+                result.setRejectedRequests(requestRepository.saveAll(requests.stream()
+                                .filter(o -> o.getStatus().equals(RequestStatus.REJECTED))
+                                .collect(Collectors.toList())).stream()
+                        .map(RequestMapper::toRequestDto)
+                        .collect(Collectors.toList()));
             }
             log.info("Статусы заявок обновлены");
-            return requestRepository.saveAll(requests).stream()
-                    .map(RequestMapper::toRequestResult)
-                    .collect(Collectors.toList());
         }
+        return result;
     }
 
     private void requestCheck(Long userId, Long eventId, Event event, List<Request> requests, Long participantLimit) {
