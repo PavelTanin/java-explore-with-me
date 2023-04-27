@@ -16,7 +16,7 @@ public class StatsClient {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private final String uri = "http://localhost:9090";
+    private final String uri = "http://stats-service:9090";
 
     private final ObjectMapper mapper = new ObjectMapper();
 

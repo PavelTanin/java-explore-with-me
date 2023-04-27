@@ -1,22 +1,5 @@
 version: '3.1'
 services:
-  stats-service:
-    build: ewm-stats-service/stats-service
-
-    image: stats-service-image
-
-    container_name: stats-service-container
-
-    ports:
-      - "9090:9090"
-
-    depends_on:
-      - stats-db
-
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
 
   main-service:
     build: ewm-main-service
@@ -30,9 +13,34 @@ services:
 
     depends_on:
       - ewm-main-db
+      - stats-service
+
+    restart: on-failure
 
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-main-db:5432/ewm-main-db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - STATS_SERVER_URL=http://stats-service:9090
+
+
+  stats-service:
+    build: ewm-stats-service/stats-service
+
+    image: stats-service-image
+
+    container_name: stats-service-container
+
+    ports:
+      - "9090:9090"
+
+    depends_on:
+      - stats-db
+
+    restart: on-failure
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
 
