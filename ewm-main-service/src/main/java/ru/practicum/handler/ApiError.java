@@ -3,8 +3,6 @@ package ru.practicum.handler;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 
 @Data
 public class ApiError {
