@@ -111,9 +111,9 @@ public class RequestServiceImpl implements RequestService {
             log.info("Заявки ids: {} на участие в событии id: {} отменены", update.getRequestIds().toString(), eventId);
         } else {
             Long requestLimit = event.getParticipantLimit();
-            Long approvedRequests = (long) event.getRequests().size();
+            Long approvedRequests = event.getRequests().stream().filter(o -> o.getStatus().equals(RequestStatus.CONFIRMED)).count();
             int updateLimit = Math.toIntExact(requestLimit - approvedRequests);
-            if (updateLimit < 0 || event.getRequestModeration().equals(false)) {
+            if (updateLimit <= 0 || requestLimit.equals(0L) || event.getRequestModeration().equals(false)) {
                 log.info("Достигнут лимит одобренных заявок или модерация заявок не требуется");
                 throw new RequestLimitException("Лимит участников события достигнут или заявки не требуют подтверждения");
             }
