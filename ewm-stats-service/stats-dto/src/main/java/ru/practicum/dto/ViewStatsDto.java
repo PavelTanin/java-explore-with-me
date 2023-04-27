@@ -1,10 +1,10 @@
 package ru.practicum.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 public class ViewStatsDto {
 
     private String app;
@@ -12,6 +12,9 @@ public class ViewStatsDto {
     private String uri;
 
     private Long hits;
+
+    public ViewStatsDto() {
+    }
 
     public ViewStatsDto(String app, String uri, Long hits) {
         this.app = app;

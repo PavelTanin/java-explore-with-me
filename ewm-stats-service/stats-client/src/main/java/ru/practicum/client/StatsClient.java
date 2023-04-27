@@ -1,59 +1,35 @@
 package ru.practicum.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.ViewStatsDto;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.*;
 
+@Component
 public class StatsClient {
 
-    private final String application;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    private final String statsServiceUri;
+    private final String uri = "http://localhost:9090";
 
-    private final ObjectMapper json;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    private final HttpClient httpClient;
-
-    @Autowired
-    public StatsClient(@Value("${spring.application.name") String application,
-                       @Value("${services.stats-service.uri:http://localhost:9090}") String statsServiceUri,
-                       ObjectMapper json) {
-        this.application = application;
-        this.statsServiceUri = statsServiceUri;
-        this.json = json;
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(5))
-                .build();
+    public String hit(HttpServletRequest request, String appName) throws JsonProcessingException {
+        EndpointHitDto hit = new EndpointHitDto(appName, request.getRequestURI(),
+                request.getRemoteAddr(), LocalDateTime.now());
+        return restTemplate.postForEntity(uri + "/hit", hit, String.class).getBody();
     }
 
-    public void hit() throws Exception {
-        EndpointHitDto hit = new EndpointHitDto();
-        hit.setApp(application);
-
-        try {
-            HttpRequest.BodyPublisher bodyPublisher = HttpRequest
-                    .BodyPublishers
-                    .ofString(json.writeValueAsString(hit));
-
-            HttpRequest hitRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(statsServiceUri + "/hit"))
-                    .POST(bodyPublisher)
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .header(HttpHeaders.ACCEPT, "application/json")
-                    .build();
-
-            HttpResponse<Void> resource = httpClient.send(hitRequest, HttpResponse.BodyHandlers.discarding());
-        } catch (Exception e) {
-            throw new Exception("Error");
-        }
+    public List<ViewStatsDto> getStats(List<String> uris, String start, String end) {
+        String url = uri + "/stats?start=" + start + "&end=" + end + "&uris=" + uris.toString()
+                .replace("[", "").replace("]", "");
+        return List.of(restTemplate.getForObject(url, ViewStatsDto[].class));
     }
 
 

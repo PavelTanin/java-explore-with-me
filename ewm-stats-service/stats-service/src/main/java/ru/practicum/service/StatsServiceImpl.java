@@ -34,7 +34,7 @@ public class StatsServiceImpl implements StatsService {
         EndpointHit endpointHit = HitMapper.toEndpointHit(endpointHitDto);
         statsRepository.save(endpointHit);
         log.info("Клик добавлен!");
-        return "Информация сохранена";
+        return "Информация о вызове ссылки сохранена";
 
     }
 
