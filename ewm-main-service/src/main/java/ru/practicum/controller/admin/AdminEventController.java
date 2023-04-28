@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.enums.State;
 import ru.practicum.service.event.EventService;
@@ -25,14 +26,14 @@ public class AdminEventController {
     private final EventService eventService;
 
     @PatchMapping("/{eventId}")
-    public ResponseEntity updateEvent(@RequestBody @Valid UpdateEventAdminRequest updateEvent,
-                                      @Positive @PathVariable(name = "eventId") Long eventId) {
+    public ResponseEntity<EventFullDto> updateEvent(@RequestBody @Valid UpdateEventAdminRequest updateEvent,
+                                                    @Positive @PathVariable(name = "eventId") Long eventId) {
         log.info("Получен PATCH-запрос от администратора на изменение события id: {}",eventId);
-        return new ResponseEntity(eventService.updateEventByAdmin(updateEvent, eventId), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.updateEventByAdmin(updateEvent, eventId), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getEventsByAdmin(@Positive @RequestParam(name = "users", required = false) List<Long> usersIds,
+    public ResponseEntity<List<EventFullDto>> getEventsByAdmin(@Positive @RequestParam(name = "users", required = false) List<Long> usersIds,
                                     @RequestParam(name = "states", required = false) List<State> states,
                                     @RequestParam(name = "categories", required = false) List<Long> cats,
                                     @RequestParam(name = "rangeStart", required = false) String start,
@@ -40,7 +41,7 @@ public class AdminEventController {
                                     @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                     @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Получен GET-запрос от администратора на получение списка всех событий");
-        return new ResponseEntity(eventService.getEventsByAdmin(usersIds, states, cats, start,
+        return new ResponseEntity<>(eventService.getEventsByAdmin(usersIds, states, cats, start,
                 end, from, size), HttpStatus.OK);
     }
 }

@@ -28,7 +28,6 @@ public class StatsServiceImpl implements StatsService {
 
     private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @Override
     public String addHit(EndpointHitDto endpointHitDto) {
         log.info("Добавляется информация о посещении: {}", endpointHitDto.toString());
         EndpointHit endpointHit = HitMapper.toEndpointHit(endpointHitDto);
@@ -38,7 +37,6 @@ public class StatsServiceImpl implements StatsService {
 
     }
 
-    @Override
     public List<ViewStatsDto> getStats(String start, String end, List<String> uris, String unique) {
         log.info("Попытка получить статистику посещений");
         switch (unique) {

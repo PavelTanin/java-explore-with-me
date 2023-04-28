@@ -1,7 +1,6 @@
 package ru.practicum.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.dto.EndpointHitDto;
@@ -18,8 +17,6 @@ public class StatsClient {
 
     private final String uri = "http://stats-service:9090";
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     public String hit(HttpServletRequest request, String appName) throws JsonProcessingException {
         EndpointHitDto hit = new EndpointHitDto(appName, request.getRequestURI(),
                 request.getRemoteAddr(), LocalDateTime.now());
@@ -29,7 +26,7 @@ public class StatsClient {
     public List<ViewStatsDto> getStats(List<String> uris, String start, String end) {
         String url = uri + "/stats?start=" + start + "&end=" + end + "&uris=" + uris.toString()
                 .replace("[", "").replace("]", "");
-        return List.of(restTemplate.getForObject(url, ViewStatsDto[].class));
+        return List.of(restTemplate.getForEntity(url, ViewStatsDto[].class).getBody());
     }
 
 

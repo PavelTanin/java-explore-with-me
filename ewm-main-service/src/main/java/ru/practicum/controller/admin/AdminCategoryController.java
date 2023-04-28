@@ -23,22 +23,22 @@ public class AdminCategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity addCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
+    public ResponseEntity<CategoryDto> addCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
         log.info("От администратора получен POST-запрос на добавление новой категории: {}", newCategoryDto.toString());
         return new ResponseEntity<>(categoryService.addCategory(newCategoryDto), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{catId}")
-    public ResponseEntity updateCategory(@RequestBody @Valid CategoryDto categoryDto,
+    public ResponseEntity<CategoryDto> updateCategory(@RequestBody @Valid CategoryDto categoryDto,
                                          @Positive @PathVariable Long catId) {
         log.info("От администратора получен PATCH-запрос на изменение категории c id: {}", catId);
-        return new ResponseEntity(categoryService.updateCategory(categoryDto, catId), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.updateCategory(categoryDto, catId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{catId}")
-    public ResponseEntity deleteCategory(@Positive @PathVariable Long catId) {
+    public ResponseEntity<String> deleteCategory(@Positive @PathVariable Long catId) {
         log.info("От администратора получен DELETE-запрос на удалениче категории с id: {}", catId);
-        return new ResponseEntity(new String[]{categoryService.deleteCategory(catId)}, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(categoryService.deleteCategory(catId), HttpStatus.NO_CONTENT);
     }
 
 

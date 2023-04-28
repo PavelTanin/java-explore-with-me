@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.StatsClient;
+import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.service.event.EventService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,15 +28,15 @@ public class PublicEventController {
     private final StatsClient statsClient;
 
     @GetMapping("/{eventId}")
-    public ResponseEntity getEvent(@Positive @PathVariable(name = "eventId") Long eventId,
-                                   HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<EventFullDto> getEvent(@Positive @PathVariable(name = "eventId") Long eventId,
+                                                 HttpServletRequest request) throws JsonProcessingException {
         log.info("Получен GET-запрос на получение информации о событии id: {}", eventId);
         log.info(statsClient.hit(request, "ewm-main-service"));
-        return new ResponseEntity(eventService.getEvent(eventId), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.getEvent(eventId), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getEvents(@RequestParam(name = "text", required = false) String text,
+    public ResponseEntity<List<EventFullDto>> getEvents(@RequestParam(name = "text", required = false) String text,
                                     @RequestParam(name = "categories", required = false) List<Long> cats,
                                     @RequestParam(name = "paid", required = false) Boolean paid,
                                     @RequestParam(name = "rangeStart", required = false) String start,
@@ -47,7 +48,7 @@ public class PublicEventController {
                                     HttpServletRequest request) throws JsonProcessingException {
         log.info("Получен GET-запрос на получение списка событий");
         log.info(statsClient.hit(request, "ewm-main-service"));
-        return new ResponseEntity(eventService.getEvents(text, cats, paid, start, end, available,
+        return new ResponseEntity<>(eventService.getEvents(text, cats, paid, start, end, available,
                 sort, from, size), HttpStatus.OK);
     }
 }

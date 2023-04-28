@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.user.NewUserDto;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;
@@ -24,19 +25,19 @@ public class AdminUserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity addUser(@RequestBody @Valid NewUserDto newUserDto) {
+    public ResponseEntity<UserDto> addUser(@RequestBody @Valid NewUserDto newUserDto) {
         log.info("От администратора получен POST-запрос на добавление нового пользователя: {}", newUserDto.toString());
         return new ResponseEntity<>(userService.addUser(newUserDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         log.info("От администратора получен DELETE-запрос на удаление пользователя: {}", userId);
-        return new ResponseEntity<>(new String[]{userService.deleteUser(userId)}, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
-    public ResponseEntity getUser(@RequestParam(required = false, name = "ids") List<Long> ids,
+    public ResponseEntity<List<UserDto>> getUser(@RequestParam(required = false, name = "ids") List<Long> ids,
                                   @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                   @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("От администратора получен GET-запрос на получение информации о пользователях: {}", ids.toString());

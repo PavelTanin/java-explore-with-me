@@ -19,42 +19,42 @@ public class ErrorHandler {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity validationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> validationException(MethodArgumentNotValidException ex) {
         log.info("Некорректно заполненно поле {}", ex.getBindingResult().getFieldError().getField());
         ApiError ae = new ApiError(HttpStatus.BAD_REQUEST.name(), "Получен некорректный запрос",
                 ex.getBindingResult().getFieldError().getDefaultMessage(), LocalDateTime.now().format(formatter));
-        return new ResponseEntity(ae, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ae, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotInitiatorException.class)
-    public ResponseEntity validationException(UserNotInitiatorException ex) {
+    public ResponseEntity<ApiError> validationException(UserNotInitiatorException ex) {
         ApiError ae = new ApiError(HttpStatus.BAD_REQUEST.name(), "Пользователь не является инициатором", ex.getMessage(),
                 LocalDateTime.now().format(formatter));
-        return new ResponseEntity(ae, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ae, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity validationException(SQLException ex) {
+    public ResponseEntity<ApiError> validationException(SQLException ex) {
         log.info("Некорректно заполненно поле");
         ApiError ae = new ApiError(HttpStatus.CONFLICT.name(), "Нарушена уникальность данных",
                 ex.getMessage(), LocalDateTime.now().format(formatter));
-        return new ResponseEntity(ae, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ae, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity validationException(ObjectNotFoundException ex) {
+    public ResponseEntity<ApiError> validationException(ObjectNotFoundException ex) {
         log.info("Объект не найден");
         ApiError ae = new ApiError(HttpStatus.NOT_FOUND.name(), "Объект не найден",
                 ex.getMessage(), LocalDateTime.now().format(formatter));
-        return new ResponseEntity(ae, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ae, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({WrongEventTimeException.class, EventPubProblemException.class,
             UserWrongPropertiesException.class, RequestLimitException.class, CancelingRequestException.class})
-    public ResponseEntity validationException(Exception ex) {
+    public ResponseEntity<ApiError> validationException(Exception ex) {
         ApiError ae = new ApiError(HttpStatus.CONFLICT.name(), "Конфликт данных", ex.getMessage(),
                 LocalDateTime.now().format(formatter));
-        return new ResponseEntity(ae, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ae, HttpStatus.CONFLICT);
     }
 
 }

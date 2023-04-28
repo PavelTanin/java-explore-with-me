@@ -117,7 +117,6 @@ public class EventServiceImpl implements EventService {
         return events.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }
 
-    @Override
     public EventFullDto getUserEvent(Long userId, Long eventId) {
         log.info("Получение информации о событии id: {} пользователя id: {}", eventId, userId);
         User user = userRepository.findById(userId).orElseThrow(()
@@ -156,7 +155,6 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventFullDto(eventInList.stream().findFirst().get());
     }
 
-    @Override
     public List<EventFullDto> getEvents(String text, List<Long> cats, Boolean paid, String start, String end,
                                         Boolean available, String sort, Integer from, Integer size) {
         log.info("Получение списка событий");
