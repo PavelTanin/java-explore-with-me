@@ -12,9 +12,9 @@ public class CommentDto {
 
     private Long id;
 
-    private Long event_id;
+    private Long event;
 
-    private Long user_id;
+    private Long author;
 
     @NotEmpty(message = "Нельзя добавить комментарий без текста")
     private String text;
@@ -26,10 +26,10 @@ public class CommentDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateTime;
 
-    public CommentDto(Long id, Long event_id, Long user_id, String text, LocalDateTime createdTime) {
+    public CommentDto(Long id, Long event, Long author, String text, LocalDateTime createdTime) {
         this.id = id;
-        this.event_id = event_id;
-        this.user_id = user_id;
+        this.event = event;
+        this.author = author;
         this.text = text;
         this.createdTime = createdTime;
     }
