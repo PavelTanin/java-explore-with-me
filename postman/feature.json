@@ -1,287 +1,11 @@
 {
 	"info": {
-		"_postman_id": "06d8bf1b-fd19-4b3e-819e-c88c1ffb93c3",
-		"name": "\"Explore With Me\" feature_comments",
+		"_postman_id": "377bb77c-e216-4b7a-a7d6-3b13c7fefa71",
+		"name": "\"Explore With Me\" feature_comments Copy 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "22586799"
 	},
 	"item": [
-		{
-			"name": "Comments",
-			"item": [
-				{
-					"name": "Добавление нового комментария",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function(){\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"text\": \"Comment Text Text\" \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/users/:userId/comments/:eventId",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								":userId",
-								"comments",
-								":eventId"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								},
-								{
-									"key": "eventId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Редактирование комментария",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
-									"    pm.response.to.have.status(200);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"text\": \"Updated Comment Text Text\" \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/users/:userId/comments/:commentId",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								":userId",
-								"comments",
-								":commentId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								},
-								{
-									"key": "commentId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Добавление нового комментария Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function(){\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"text\": \"Comment Text Text\" \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/users/:userId/comments/:eventId",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								":userId",
-								"comments",
-								":eventId"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								},
-								{
-									"key": "eventId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение списка комментариев сортировка по времени desc",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
-									"    pm.response.to.have.status(200);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/comments/:eventId?byTime=desc",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"comments",
-								":eventId"
-							],
-							"query": [
-								{
-									"key": "byTime",
-									"value": "desc"
-								}
-							],
-							"variable": [
-								{
-									"key": "eventId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение списка комментариев сортировка по времени asc",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
-									"    pm.response.to.have.status(200);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/comments/:eventId?byTime=asc",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"comments",
-								":eventId"
-							],
-							"query": [
-								{
-									"key": "byTime",
-									"value": "asc"
-								}
-							],
-							"variable": [
-								{
-									"key": "eventId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
 		{
 			"name": "Validation",
 			"item": [
@@ -491,6 +215,699 @@
 								{
 									"key": "commentId",
 									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Добавление нового комментария от пользователя 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Comment Test Text\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:eventId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":eventId"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "eventId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Редактирование комментария",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Updated Comment Text Text\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "commentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление нового комментария от пользователя 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"New Comment Test Text\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:eventId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":eventId"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "eventId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление нового комментария от пользователя 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"From user3 Comment Test Text\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:eventId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":eventId"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "3"
+								},
+								{
+									"key": "eventId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Редактирование комментария администратором",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Updated by admin Comment Test Text\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/admin/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "commentId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментария 1 пользователем 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "commentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка своих комментариев пользователем 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментария 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "commentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев сортировка по времени desc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/comments/events/:eventId?byTime=desc",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"comments",
+								"events",
+								":eventId"
+							],
+							"query": [
+								{
+									"key": "byTime",
+									"value": "desc"
+								}
+							],
+							"variable": [
+								{
+									"key": "eventId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев сортировка по времени asc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/comments/events/:eventId?byTime=asc",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"comments",
+								"events",
+								":eventId"
+							],
+							"query": [
+								{
+									"key": "byTime",
+									"value": "asc"
+								}
+							],
+							"variable": [
+								{
+									"key": "eventId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление коммента администратором",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/admin/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "commentId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление комментария пользователем",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "commentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conflict",
+			"item": [
+				{
+					"name": "Получение информации о чужом комментарии",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(409);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "commentId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление чужого комментария",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function(){\r",
+									"    pm.response.to.have.status(409);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/:userId/comments/:commentId",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":userId",
+								"comments",
+								":commentId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								},
+								{
+									"key": "commentId",
+									"value": "3"
 								}
 							]
 						}

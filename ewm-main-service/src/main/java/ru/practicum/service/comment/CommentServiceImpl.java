@@ -48,7 +48,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
-    public CommentDto updateComment(CommentDto commentDto, Long userId, Long commentId) {
+    public CommentDto updateCommentByAdmin(CommentDto commentDto, Long commentId) {
+        log.info("Обновляется комментарий");
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new ObjectNotFoundException("Комментарий отсутствует"));
+        comment.setText(commentDto.getText());
+        return CommentMapper.toCommentDto(comment);
+    }
+
+    @Transactional
+    public CommentDto updateCommentByUser(CommentDto commentDto, Long userId, Long commentId) {
         log.info("Редактируется комментарий");
         Comment comment = commentRepository.findById(commentId).orElseThrow(()
                 -> new ObjectNotFoundException("Такого комментария не существует"));
@@ -61,6 +70,53 @@ public class CommentServiceImpl implements CommentService {
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
 
+    @Transactional
+    public String deleteCommentByAdmin(Long commentId) {
+        log.info("Удаление комментария администратором");
+        if (!commentRepository.existsById(commentId)) {
+            log.info("Попытка удалить несуществующий комментарий");
+            throw new ObjectNotFoundException("Комментарий не найден");
+        }
+        commentRepository.deleteById(commentId);
+        log.info("Комментарий удален");
+        return "Комментарий удален";
+    }
+
+    @Transactional
+    public String deleteCommentByAuthor(Long userId, Long commentId) {
+        log.info("Удаление комментария");
+        if (!commentRepository.existsById(commentId)) {
+            log.info("Попытка удалить несуществующий комментарий");
+            throw new ObjectNotFoundException("Комментарий не найден");
+        }
+        if (!commentRepository.findCommentAuthorId(commentId).equals(userId)) {
+            log.info("Попытка удалить чужой комментарий");
+            throw new UserWrongPropertiesException("Невозможно удалить чужой комментарий");
+        }
+        commentRepository.deleteById(commentId);
+        log.info("Комментарий удален");
+        return "Комментарий удален";
+    }
+
+    public CommentDto getUserComment(Long userId, Long commentId) {
+        log.info("Получение информации о комментарии");
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new ObjectNotFoundException("Комментарий не найден"));
+        if (!comment.getUser().getId().equals(userId)) {
+            log.info("Пользователь запрашивает чужой комментарий");
+            throw new UserWrongPropertiesException("Невозможно получить информацию о чужом комментарии");
+        }
+        log.info("Комментарий получен");
+        return CommentMapper.toCommentDto(comment);
+    }
+
+    public List<CommentDto> getAllUserComments(Long userId) {
+        log.info("Получение списка комментариев, оставленных пользователем id: {}", userId);
+        return commentRepository.findAllByUser_IdOrderById(userId).stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList());
+    }
+
     public CommentDto getComment(Long commentId) {
         log.info("Получение комментария");
         log.info("Комментарий получен");
@@ -68,7 +124,6 @@ public class CommentServiceImpl implements CommentService {
                 -> new ObjectNotFoundException("Такого комментария нет")));
     }
 
-    @Override
     public List<CommentDto> getComments(Long eventId, String byTime, Integer from, Integer size) {
         log.info("Получение списка комментариев события id: {}", eventId);
         if (!eventRepository.existsById(eventId)) {

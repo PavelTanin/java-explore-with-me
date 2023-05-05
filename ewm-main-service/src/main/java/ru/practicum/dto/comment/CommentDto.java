@@ -3,6 +3,7 @@ package ru.practicum.dto.comment;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import ru.practicum.dto.user.UserShortDto;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class CommentDto {
 
     private Long event;
 
-    private Long author;
+    private UserShortDto author;
 
     @NotEmpty(message = "Нельзя добавить комментарий без текста")
     private String text;
@@ -26,7 +27,7 @@ public class CommentDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateTime;
 
-    public CommentDto(Long id, Long event, Long author, String text, LocalDateTime createdTime) {
+    public CommentDto(Long id, Long event, UserShortDto author, String text, LocalDateTime createdTime) {
         this.id = id;
         this.event = event;
         this.author = author;

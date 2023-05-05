@@ -22,7 +22,13 @@ public class PublicCommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommentDto> getComments(@Positive @PathVariable(name = "commentId") Long commentId) {
+        log.info("Получен GET-запрос на получение информации о комментарие id: {}", commentId);
+        return new ResponseEntity<>(commentService.getComment(commentId), HttpStatus.OK);
+    }
+
+    @GetMapping("/events/{eventId}")
     public ResponseEntity<List<CommentDto>> getComments(@Positive @PathVariable(name = "eventId") Long eventId,
                                                         @RequestParam(name = "byTime", defaultValue = "asc") String byTime,
                                                         @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,

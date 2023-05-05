@@ -12,6 +12,7 @@ import ru.practicum.service.comment.CommentService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users/{userId}/comments")
@@ -36,6 +37,26 @@ public class PrivateCommentController {
                                                     @Positive @PathVariable(name = "userId") Long userId,
                                                     @Positive @PathVariable(name = "commentId") Long commentId) {
         log.info("Получен PATCH-запрос от пользователя id: {} на изменение комментария id: {}", userId, commentId);
-        return new ResponseEntity<>(commentService.updateComment(commentDto, userId, commentId), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.updateCommentByUser(commentDto, userId, commentId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@Positive @PathVariable(name = "userId") Long userId,
+                                                @Positive @PathVariable(name = "commentId") Long commentId) {
+        log.info("Получен DELETE-запрос от пользователя id: {} на удаление комментария id: {}", userId, commentId);
+        return new ResponseEntity<>(commentService.deleteCommentByAuthor(userId, commentId), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommentDto> getAuthorComment(@Positive @PathVariable(name = "userId") Long userId,
+                                                @Positive @PathVariable(name = "commentId") Long commentId) {
+        log.info("Получен GET-запрос на просмотр комментария id: {} от пользователя id: {}", commentId, userId);
+        return new ResponseEntity<>(commentService.getUserComment(userId, commentId), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CommentDto>> getAllUserComments(@Positive @PathVariable(name = "userId") Long userId) {
+        log.info("Получен GET-запрос от пользователя id: {} на получение списка своих комментариев");
+        return new ResponseEntity<>(commentService.getAllUserComments(userId), HttpStatus.OK);
     }
 }
