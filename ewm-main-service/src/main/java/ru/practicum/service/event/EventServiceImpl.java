@@ -172,8 +172,7 @@ public class EventServiceImpl implements EventService {
         getViews(events);
         if (available != null && available.equals(true)) {
             events.stream().filter(o -> o.getRequests().stream()
-                    .filter(r -> r.getStatus().equals(RequestStatus.CONFIRMED)).count() < o.getParticipantLimit())
-                    .collect(Collectors.toList());
+                    .filter(r -> r.getStatus().equals(RequestStatus.CONFIRMED)).count() < o.getParticipantLimit());
         }
         if (sort != null) {
             switch (sort) {
